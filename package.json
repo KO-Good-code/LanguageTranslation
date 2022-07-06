@@ -1,0 +1,67 @@
+{
+	"name": "language-translation",
+	"displayName": "Language Translation",
+	"description": "中文转为英文",
+	"publisher": "77l6eqb7ev2lzgiotmygucxcrhi2is6wwtzbeolvld3vuvj2nrxq",
+	"icon": "images/icon.png",
+	"version": "0.0.2",
+	"engines": {
+		"vscode": "^1.54.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "select.translation",
+				"title": "翻译"
+			}
+		],
+		"menus": {
+			"editor/context": [
+				{
+					"when": "editorHasSelection",
+					"command": "select.translation",
+					"alt": "select.translation",
+					"group": "navigation"
+				}
+			]
+		},
+		"keybindings": [
+			{
+				"command": "select.translation",
+				"key": "ctrl+m",
+				"mac": "ctrl+m"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
+		"lint": "eslint src --ext ts",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.54.0",
+		"@types/glob": "^7.2.0",
+		"@types/mocha": "^9.1.1",
+		"@types/node": "14.x",
+		"@typescript-eslint/eslint-plugin": "^5.21.0",
+		"@typescript-eslint/parser": "^5.21.0",
+		"eslint": "^8.14.0",
+		"glob": "^8.0.1",
+		"mocha": "^9.2.2",
+		"typescript": "^4.6.4",
+		"@vscode/test-electron": "^2.1.3"
+	},
+	"dependencies": {
+		"web-request": "^1.0.7"
+	}
+}

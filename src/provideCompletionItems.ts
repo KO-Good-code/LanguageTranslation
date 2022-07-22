@@ -35,7 +35,7 @@ function CapitalizeAndRemoveSpaces(str: string):string {
 // 选择翻译中文
 export async function SelectTranslation(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
   const text = textEditor.document.getText(textEditor.selection);
-  const config = vscode.workspace.getConfiguration('translation', vscode.ConfigurationTarget.Global);
+  const config = vscode.workspace.getConfiguration('translation');
   const res = await FormCnToEn(text, config.appid, config.key);
   console.log(res.content);
   const content = JSON.parse(res.content);

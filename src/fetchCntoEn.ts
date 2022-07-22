@@ -1,10 +1,7 @@
 import * as WebRequest from 'web-request'
 import MD5 from './md5';
 
-export async function FormCnToEn(str: string): Promise<any>{
-  
-  const appid = '20220531001235175';
-	const key = 'V0zYO4tWdKY4vygmu3Dn';
+export async function FormCnToEn(str: string, appid: string | number, key: string): Promise<any>{
 	const salt = (new Date).getTime();
 	const isChinese = WhetherChinese(str);
 	// 多个query可以用\n连接  如 query='apple\norange\nbanana\npear'

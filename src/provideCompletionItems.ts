@@ -1,11 +1,13 @@
 import * as vscode from 'vscode';
 import { FormCnToEn } from './fetchCntoEn';
+// import config from './config';
 
 export async function provideCompletionItems(document:vscode.TextDocument, position:vscode.Position) {
   const line = document.getWordRangeAtPosition(position);
   const word = document.getText(line);
   const lineText = word.substr(0, position.character);
-  const res = await FormCnToEn(lineText);
+  const config = vscode.workspace.getConfiguration('translation');
+  const res = await FormCnToEn(lineText, config.appid, config.key);
   const content = JSON.parse(res.content);
   const txt = CapitalizeAndRemoveSpaces(content?.trans_result[0]?.dst);
   // console.log(txt, typeof txt);
@@ -16,7 +18,8 @@ export async function provideCompletionItems(document:vscode.TextDocument, posit
 // 悬浮翻译
 export async function provideHover(document:vscode.TextDocument, position:vscode.Position) {
   const word = document.getText(document.getWordRangeAtPosition(position));
-  const res = await FormCnToEn(word);
+  const config = vscode.workspace.getConfiguration('translation');
+  const res = await FormCnToEn(word, config.appid, config.key);
   const content = JSON.parse(res.content);
   const txt = CapitalizeAndRemoveSpaces(content?.trans_result[0]?.dst);
   return new vscode.Hover(`* **中文：**：${word}\n* **英文：**：${txt}\n`);
@@ -32,7 +35,8 @@ function CapitalizeAndRemoveSpaces(str: string):string {
 // 选择翻译中文
 export async function SelectTranslation(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
   const text = textEditor.document.getText(textEditor.selection);
-  const res = await FormCnToEn(text);
+  const config = vscode.workspace.getConfiguration('translation', vscode.ConfigurationTarget.Global);
+  const res = await FormCnToEn(text, config.appid, config.key);
   console.log(res.content);
   const content = JSON.parse(res.content);
   const txt = CapitalizeAndRemoveSpaces(content?.trans_result[0]?.dst);
@@ -41,3 +45,29 @@ export async function SelectTranslation(textEditor: vscode.TextEditor, edit: vsc
   // 插入文本
   textEditor.insertSnippet(value);
 }
+
+// 判断是否有配置云翻译appid和key
+// async function isCloudTranslation() {
+//   if(!config.appid) {
+//     vscode.window.showInputBox({
+//       password: false,
+//       placeHolder: "请输入appid",
+//       validateInput(value) {
+//         if(value) {return value;}
+//       },
+//     }).then(msg => {
+//       config.appid = msg || '';
+//     });
+//   }
+//   if(!config.key) {
+//     vscode.window.showInputBox({
+//       password: false,
+//       placeHolder: "请输入key",
+//       validateInput(value) {
+//         if(value) {return value;}
+//       },
+//     }).then(msg => {
+//       config.key = msg || '';
+//     });
+//   }
+// }

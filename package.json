@@ -2,12 +2,15 @@
 	"name": "language-translation",
 	"displayName": "Language Translation",
 	"description": "中文转为英文",
-	"publisher": "77l6eqb7ev2lzgiotmygucxcrhi2is6wwtzbeolvld3vuvj2nrxq",
-	"icon": "images/icon.png",
-	"version": "0.0.2",
+	
+	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.54.0"
 	},
+	"repository": {
+    "type": "git",
+    "url": "https://github.com/KO-Good-code/LanguageTranslation"
+  },
 	"categories": [
 		"Other"
 	],
@@ -38,8 +41,22 @@
 				"key": "ctrl+m",
 				"mac": "ctrl+m"
 			}
-		]
+		],
+		"configuration": {
+			"title": "Plugin LanguageTranslation config. LanguageTranslation插件配置",
+			"properties": {
+				"translation.appid": {
+					"type": "string",
+					"description": "input you baidu cloud appid"
+				},
+				"translation.key": {
+					"type": "string",
+					"description": "input you baidu cloud key"
+				}
+			}
+		}
 	},
+	
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",

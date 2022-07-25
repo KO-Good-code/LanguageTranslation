@@ -20,6 +20,7 @@ export async function provideHover(document:vscode.TextDocument, position:vscode
   const word = document.getText(document.getWordRangeAtPosition(position));
   const config = vscode.workspace.getConfiguration('translation');
   if(!config.enabled) {return;}
+  isCloudTranslation(config);
   const res = await FormCnToEn(word, config.appid, config.key);
   const content = JSON.parse(res.content);
   const txt = CapitalizeAndRemoveSpaces(content?.trans_result[0]?.dst);
@@ -37,38 +38,41 @@ function CapitalizeAndRemoveSpaces(str: string):string {
 export async function SelectTranslation(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
   const text = textEditor.document.getText(textEditor.selection);
   const config = vscode.workspace.getConfiguration('translation');
+  isCloudTranslation(config);
   const res = await FormCnToEn(text, config.appid, config.key);
-  console.log(res.content);
   const content = JSON.parse(res.content);
+  if(content.error_code !== 52000) {
+    vscode.window.showErrorMessage(`接口错误：${res.content}`);
+    return;
+  }
   const txt = CapitalizeAndRemoveSpaces(content?.trans_result[0]?.dst);
   const value = new vscode.SnippetString(`${text}\n${txt}`);
-  const line = textEditor.document.lineCount;
   // 插入文本
   textEditor.insertSnippet(value);
 }
 
 // 判断是否有配置云翻译appid和key
-// async function isCloudTranslation() {
-//   if(!config.appid) {
-//     vscode.window.showInputBox({
-//       password: false,
-//       placeHolder: "请输入appid",
-//       validateInput(value) {
-//         if(value) {return value;}
-//       },
-//     }).then(msg => {
-//       config.appid = msg || '';
-//     });
-//   }
-//   if(!config.key) {
-//     vscode.window.showInputBox({
-//       password: false,
-//       placeHolder: "请输入key",
-//       validateInput(value) {
-//         if(value) {return value;}
-//       },
-//     }).then(msg => {
-//       config.key = msg || '';
-//     });
-//   }
-// }
+function isCloudTranslation(config: vscode.WorkspaceConfiguration) {
+  if(!config.appid) {
+    vscode.window.showInputBox({
+      password: false,
+      placeHolder: "请输入百度云翻译appid",
+      validateInput(value) {
+        if(!value) {return "请输入正确的百度云翻译appid";}
+      },
+    }).then(msg => {
+      config.update('appid', msg, vscode.ConfigurationTarget.Global);
+    });
+  }
+  if(!config.key) {
+    vscode.window.showInputBox({
+      password: false,
+      placeHolder: "请输入百度云翻译key",
+      validateInput(value) {
+        if(!value) {return "请输入正确的百度云翻译key"}
+      },
+    }).then(msg => {
+      config.update('key', msg, vscode.ConfigurationTarget.Global);
+    });
+  }
+}

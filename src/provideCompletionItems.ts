@@ -19,6 +19,7 @@ export async function provideCompletionItems(document:vscode.TextDocument, posit
 export async function provideHover(document:vscode.TextDocument, position:vscode.Position) {
   const word = document.getText(document.getWordRangeAtPosition(position));
   const config = vscode.workspace.getConfiguration('translation');
+  if(!config.enabled) {return;}
   const res = await FormCnToEn(word, config.appid, config.key);
   const content = JSON.parse(res.content);
   const txt = CapitalizeAndRemoveSpaces(content?.trans_result[0]?.dst);

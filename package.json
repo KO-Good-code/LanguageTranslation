@@ -2,8 +2,9 @@
 	"name": "language-translation",
 	"displayName": "Language Translation",
 	"description": "中文转为英文",
-	
-	"version": "0.0.1",
+	"publisher": "77l6eqb7ev2lzgiotmygucxcrhi2is6wwtzbeolvld3vuvj2nrxq",
+	"icon": "images/icon.png",
+	"version": "0.0.3",
 	"engines": {
 		"vscode": "^1.54.0"
 	},
@@ -52,6 +53,11 @@
 				"translation.key": {
 					"type": "string",
 					"description": "input you baidu cloud key"
+				},
+				"translation.enabled": {
+					"type": "boolean",
+					"default": false,
+					"description": "Plugin Hover enabled.\n\n  悬浮翻译是否启用"
 				}
 			}
 		}

@@ -4,7 +4,7 @@
 	"description": "中文转为英文",
 	"publisher": "77l6eqb7ev2lzgiotmygucxcrhi2is6wwtzbeolvld3vuvj2nrxq",
 	"icon": "images/icon.png",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"engines": {
 		"vscode": "^1.54.0"
 	},

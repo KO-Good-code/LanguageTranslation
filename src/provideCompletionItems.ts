@@ -23,6 +23,10 @@ export async function provideHover(document:vscode.TextDocument, position:vscode
   isCloudTranslation(config);
   const res = await FormCnToEn(word, config.appid, config.key);
   const content = JSON.parse(res.content);
+  if(content.error_code) {
+    vscode.window.showErrorMessage(`接口错误：${res.content}`);
+    return;
+  }
   const txt = CapitalizeAndRemoveSpaces(content?.trans_result[0]?.dst);
   return new vscode.Hover(`* **中文：**：${word}\n* **英文：**：${txt}\n`);
 }
@@ -41,7 +45,7 @@ export async function SelectTranslation(textEditor: vscode.TextEditor, edit: vsc
   isCloudTranslation(config);
   const res = await FormCnToEn(text, config.appid, config.key);
   const content = JSON.parse(res.content);
-  if(content.error_code !== 52000) {
+  if(content.error_code) {
     vscode.window.showErrorMessage(`接口错误：${res.content}`);
     return;
   }
